@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify';
 import { useStore } from '../store/index.js';
 import { api } from '../utils/api.js';
 import { useMobile } from '../hooks/useMobile.js';
+import NextcloudBrowserModal from './NextcloudBrowserModal.jsx';
 import { useEditor, EditorContent, useEditorState, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
 import { Extension } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
@@ -165,7 +166,7 @@ function parseChips(val) {
 
 export default function ComposeModal() {
   const { t } = useTranslation();
-  const { closeCompose, composeData, accounts, addNotification, setSelectedAccount, plaintextEmail, setThreadMessages } = useStore();
+  const { closeCompose, composeData, accounts, addNotification, setSelectedAccount, plaintextEmail, setThreadMessages, nextcloudConnected } = useStore();
   const isMobile = useMobile();
 
   const isReply = !!(composeData?.isReply || composeData?.isReplyAll);
@@ -290,6 +291,7 @@ export default function ComposeModal() {
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
+  const [showNcBrowser, setShowNcBrowser] = useState(false);
   const signatureRef = useRef(null);
   const quotedHtmlRef = useRef(null);
   const composeWindowRef = useRef(null);
@@ -625,6 +627,13 @@ export default function ComposeModal() {
       reader.readAsDataURL(file);
     });
     e.target.value = '';
+  };
+
+  const handleNextcloudFileSelect = (file) => {
+    setAttachments(prev => {
+      if (prev.some(a => a.name === file.name)) return prev;
+      return [...prev, file];
+    });
   };
 
   const handleKeyDown = (e) => {
@@ -986,6 +995,9 @@ export default function ComposeModal() {
 
     return (
       <>
+      {showNcBrowser && (
+        <NextcloudBrowserModal mode="file" onSelect={handleNextcloudFileSelect} onClose={() => setShowNcBrowser(false)} />
+      )}
       <div style={{
         position: 'fixed', inset: 0, zIndex: 1999,
         background: 'rgba(0,0,0,0.25)',
@@ -1229,6 +1241,7 @@ export default function ComposeModal() {
           ) : (
             <div className="tiptap-compose" style={{ flex: 1, minHeight: 200, display: 'flex', flexDirection: 'column' }}>
               <RichToolbar editor={editor} onAttach={() => fileInputRef.current?.click()}
+                onAttachNextcloud={nextcloudConnected ? () => setShowNcBrowser(true) : undefined}
                 htmlMode={htmlMode}
                 onToggleHtml={() => {
                   if (!htmlMode) { setHtmlSource(editor?.getHTML() ?? ''); setHtmlMode(true); }
@@ -1601,6 +1614,9 @@ export default function ComposeModal() {
 
   return (
     <>
+      {showNcBrowser && (
+        <NextcloudBrowserModal mode="file" onSelect={handleNextcloudFileSelect} onClose={() => setShowNcBrowser(false)} />
+      )}
       {maximized && (
         <div
           onClick={() => setMaximized(false)}
@@ -1850,6 +1866,7 @@ export default function ComposeModal() {
 
       {/* Toolbar — sits outside overflow container so dropdowns are never clipped */}
       {!plaintextEmail && <RichToolbar editor={editor} onAttach={() => fileInputRef.current?.click()} onInsertImage={() => imageInputRef.current?.click()}
+        onAttachNextcloud={nextcloudConnected ? () => setShowNcBrowser(true) : undefined}
         htmlMode={htmlMode}
         onToggleHtml={() => {
           if (!htmlMode) { setHtmlSource(editor?.getHTML() ?? ''); setHtmlMode(true); }
@@ -2309,7 +2326,7 @@ function Sep() {
   return <span style={{ width: 1, background: 'var(--border-subtle)', margin: '2px 4px', alignSelf: 'stretch' }} />;
 }
 
-function RichToolbar({ editor, onAttach, onInsertImage, htmlMode, onToggleHtml, isMobile, aiEnabled, onAiAction, aiPanelOpen }) {
+function RichToolbar({ editor, onAttach, onAttachNextcloud, onInsertImage, htmlMode, onToggleHtml, isMobile, aiEnabled, onAiAction, aiPanelOpen }) {
   const { t } = useTranslation();
   const savedSelectionRef = useRef(null);
   const [aiMenuPos, setAiMenuPos] = useState(null);
@@ -2483,6 +2500,15 @@ function RichToolbar({ editor, onAttach, onInsertImage, htmlMode, onToggleHtml, 
                 </svg>
               </button>
             )}
+            {onAttachNextcloud && (
+              <button title={t('compose.toolbar.attachFromNextcloud')} onMouseDown={e => { e.preventDefault(); onAttachNextcloud(); }}
+                style={{ background: 'none', border: 'none', borderRadius: 4, padding: '6px 4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--text-secondary)', WebkitTapHighlightColor: 'transparent' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M7 18a4.5 4.5 0 0 1-.7-8.94A5.5 5.5 0 0 1 17 8a4 4 0 0 1 .5 7.97"/>
+                  <path d="M12 12v7m0-7l-2.5 2.5M12 12l2.5 2.5"/>
+                </svg>
+              </button>
+            )}
             <button ref={linkBtnRef} title={t('compose.toolbar.insertLink')} onMouseDown={openLink}
               style={{ background: es.link ? 'var(--bg-hover)' : 'none', border: 'none', borderRadius: 4, padding: '6px 4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: es.link ? 'var(--accent)' : 'var(--text-secondary)', WebkitTapHighlightColor: 'transparent' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
@@ -2592,6 +2618,15 @@ function RichToolbar({ editor, onAttach, onInsertImage, htmlMode, onToggleHtml, 
             style={{ background: 'none', border: 'none', borderRadius: 4, padding: '3px 6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
+        )}
+        {onAttachNextcloud && (
+          <button title={t('compose.toolbar.attachFromNextcloud')} onMouseDown={e => { e.preventDefault(); onAttachNextcloud(); }}
+            style={{ background: 'none', border: 'none', borderRadius: 4, padding: '3px 6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M7 18a4.5 4.5 0 0 1-.7-8.94A5.5 5.5 0 0 1 17 8a4 4 0 0 1 .5 7.97"/>
+              <path d="M12 12v7m0-7l-2.5 2.5M12 12l2.5 2.5"/>
             </svg>
           </button>
         )}

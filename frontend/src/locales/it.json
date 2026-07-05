@@ -150,6 +150,7 @@
       "restore": "Ripristina",
       "close": "Chiudi",
       "attachFile": "Allega file",
+      "attachFromNextcloud": "Allega da Nextcloud",
       "insertLink": "Inserisci link",
       "apply": "Applica",
       "insertTable": "Inserisci tabella",
@@ -191,6 +192,10 @@
     "allowDomain": "Consenti sempre da @{{domain}}",
     "downloading": "Download in corso…",
     "downloadAll": "Scarica tutto",
+    "saveToNextcloud": "Salva su Nextcloud",
+    "savingToNextcloud": "Salvataggio su Nextcloud…",
+    "savedToNextcloud": "Salvato su Nextcloud",
+    "saveToNextcloudFailed": "Impossibile salvare su Nextcloud",
     "reply": "Rispondi",
     "replyAll": "Rispondi a tutti",
     "replyOptions": "Opzioni di risposta",
@@ -1154,6 +1159,20 @@
         "summary": "{{contacts}} contatti in {{books}} rubriche",
         "syncFailed": "Ultima sincronizzazione non riuscita: {{error}}",
         "help": "Usa una password app di Nextcloud, non quella di accesso: gli utenti SSO devono crearne una in Impostazioni → Sicurezza. I contatti sono sincronizzati a senso unico e di sola lettura in MailFlow."
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "Salva gli allegati sul tuo Nextcloud e allega file da Nextcloud",
+        "connect": "Connetti",
+        "connecting": "Connessione...",
+        "disconnect": "Disconnetti",
+        "connected": "Connesso",
+        "notConnected": "Non connesso",
+        "usernameLabel": "Nome utente Nextcloud",
+        "usernamePh": "tuo-nome-utente",
+        "passwordLabel": "Password per app",
+        "passwordPh": "Incolla la tua password per app di Nextcloud",
+        "help": "Crea una password per app in Nextcloud in Impostazioni → Sicurezza → Password per app"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "Creazione...",
     "taskCreated": "Attività creata in Todoist",
     "openTask": "Apri in Todoist"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "Cartella principale",
+      "titleAttach": "Allega da Nextcloud",
+      "titleSave": "Salva su Nextcloud",
+      "empty": "Questa cartella è vuota",
+      "saveHere": "Salva qui"
+    }
   }
 }

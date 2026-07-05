@@ -306,6 +306,10 @@ const SAME_VALUE_ALLOWED = {
   'todoist.priorityHigh': [['es', 'it']],
   // "Media" — "Medium" translates identically in es and it (Romance languages)
   'todoist.priorityMedium': [['es', 'it']],
+
+  // ── Nextcloud integration ──────────────────────────────────────────────────
+  // "Nextcloud" — brand name, same in all locales
+  'admin.integrations.nextcloud.title': 'any',
 };
 
 // Keys referenced dynamically (via a variable passed to t()) that cannot be

@@ -150,6 +150,7 @@
       "restore": "还原",
       "close": "关闭",
       "attachFile": "附加文件",
+      "attachFromNextcloud": "从 Nextcloud 添加附件",
       "insertLink": "插入链接",
       "apply": "应用",
       "insertTable": "插入表格",
@@ -191,6 +192,10 @@
     "allowDomain": "始终允许来自 @{{domain}} 的图片",
     "downloading": "下载中…",
     "downloadAll": "下载全部",
+    "saveToNextcloud": "保存到 Nextcloud",
+    "savingToNextcloud": "正在保存到 Nextcloud…",
+    "savedToNextcloud": "已保存到 Nextcloud",
+    "saveToNextcloudFailed": "保存到 Nextcloud 失败",
     "reply": "回复",
     "replyAll": "回复全部",
     "replyOptions": "回复选项",
@@ -1154,6 +1159,20 @@
         "summary": "{{books}} 个通讯簿中的 {{contacts}} 个联系人",
         "syncFailed": "上次同步失败：{{error}}",
         "help": "请使用 Nextcloud 应用专用密码，而非登录密码——SSO 用户需在“设置 → 安全”中创建。联系人为单向同步，在 MailFlow 中为只读。"
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "将附件保存到 Nextcloud，或从 Nextcloud 添加附件",
+        "connect": "连接",
+        "connecting": "连接中...",
+        "disconnect": "断开",
+        "connected": "已连接",
+        "notConnected": "未连接",
+        "usernameLabel": "Nextcloud 用户名",
+        "usernamePh": "您的用户名",
+        "passwordLabel": "应用密码",
+        "passwordPh": "粘贴您的 Nextcloud 应用密码",
+        "help": "在 Nextcloud 的设置 → 安全 → 应用密码中创建应用密码"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "创建中...",
     "taskCreated": "任务已在 Todoist 中创建",
     "openTask": "在 Todoist 中打开"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "主目录",
+      "titleAttach": "从 Nextcloud 添加附件",
+      "titleSave": "保存到 Nextcloud",
+      "empty": "此文件夹为空",
+      "saveHere": "保存到此处"
+    }
   }
 }

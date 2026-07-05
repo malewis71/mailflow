@@ -57,6 +57,7 @@ If you contribute code, please read the [Contributor License Agreement](CLA.md).
 - **SSO / OIDC** — single sign-on via any OpenID Connect provider; group claims from the IdP can be mapped to the MailFlow admin role
 - **Microsoft 365 / OAuth2** — work accounts via Azure App Registration; personal Outlook.com via device code flow
 - **Todoist integration** — create tasks directly from emails; tasks include a deep link back to the original message
+- **Nextcloud integration** — save email attachments into your Nextcloud files, and attach files from Nextcloud when composing; each user connects with their own Nextcloud login
 - **CardDAV** — expose your MailFlow contacts as a CardDAV address book for sync with phone and desktop contact apps; contact photos sync and appear as sender avatars in the message list
 
 ---

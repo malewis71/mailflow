@@ -150,6 +150,7 @@
       "restore": "Restaurer",
       "close": "Fermer",
       "attachFile": "Joindre un fichier",
+      "attachFromNextcloud": "Joindre depuis Nextcloud",
       "insertLink": "Insérer un lien",
       "apply": "Appliquer",
       "insertTable": "Insérer un tableau",
@@ -191,6 +192,10 @@
     "allowDomain": "Toujours autoriser depuis @{{domain}}",
     "downloading": "Téléchargement…",
     "downloadAll": "Tout télécharger",
+    "saveToNextcloud": "Enregistrer dans Nextcloud",
+    "savingToNextcloud": "Enregistrement dans Nextcloud…",
+    "savedToNextcloud": "Enregistré dans Nextcloud",
+    "saveToNextcloudFailed": "Impossible d'enregistrer dans Nextcloud",
     "reply": "Répondre",
     "replyAll": "Répondre à tous",
     "replyOptions": "Options de réponse",
@@ -1154,6 +1159,20 @@
         "summary": "{{contacts}} contacts dans {{books}} carnets",
         "syncFailed": "Échec de la dernière synchro : {{error}}",
         "help": "Utilisez un mot de passe d'application Nextcloud, pas votre mot de passe de connexion — les utilisateurs SSO doivent en créer un dans Paramètres → Sécurité. Les contacts sont synchronisés à sens unique et en lecture seule dans MailFlow."
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "Enregistrez les pièces jointes dans Nextcloud et joignez des fichiers depuis Nextcloud",
+        "connect": "Connecter",
+        "connecting": "Connexion...",
+        "disconnect": "Déconnecter",
+        "connected": "Connecté",
+        "notConnected": "Non connecté",
+        "usernameLabel": "Nom d'utilisateur Nextcloud",
+        "usernamePh": "votre-nom-utilisateur",
+        "passwordLabel": "Mot de passe d'application",
+        "passwordPh": "Collez votre mot de passe d'application Nextcloud",
+        "help": "Créez un mot de passe d'application dans Nextcloud sous Paramètres → Sécurité → Mots de passe d'application"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "Création...",
     "taskCreated": "Tâche créée dans Todoist",
     "openTask": "Ouvrir dans Todoist"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "Accueil",
+      "titleAttach": "Joindre depuis Nextcloud",
+      "titleSave": "Enregistrer dans Nextcloud",
+      "empty": "Ce dossier est vide",
+      "saveHere": "Enregistrer ici"
+    }
   }
 }

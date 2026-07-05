@@ -150,6 +150,7 @@
       "restore": "Restaurar",
       "close": "Cerrar",
       "attachFile": "Adjuntar archivo",
+      "attachFromNextcloud": "Adjuntar desde Nextcloud",
       "insertLink": "Insertar enlace",
       "apply": "Aplicar",
       "insertTable": "Insertar tabla",
@@ -191,6 +192,10 @@
     "allowDomain": "Permitir siempre desde @{{domain}}",
     "downloading": "Descargando…",
     "downloadAll": "Descargar todo",
+    "saveToNextcloud": "Guardar en Nextcloud",
+    "savingToNextcloud": "Guardando en Nextcloud…",
+    "savedToNextcloud": "Guardado en Nextcloud",
+    "saveToNextcloudFailed": "No se pudo guardar en Nextcloud",
     "reply": "Responder",
     "replyAll": "Responder a todos",
     "replyOptions": "Opciones de respuesta",
@@ -1154,6 +1159,20 @@
         "summary": "{{contacts}} contactos en {{books}} libretas",
         "syncFailed": "La última sincronización falló: {{error}}",
         "help": "Usa una contraseña de aplicación de Nextcloud, no la de inicio de sesión: los usuarios de SSO deben crear una en Ajustes → Seguridad. Los contactos se sincronizan en un solo sentido y son de solo lectura en MailFlow."
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "Guarda archivos adjuntos en tu Nextcloud y adjunta archivos desde Nextcloud",
+        "connect": "Conectar",
+        "connecting": "Conectando...",
+        "disconnect": "Desconectar",
+        "connected": "Conectado",
+        "notConnected": "No conectado",
+        "usernameLabel": "Nombre de usuario de Nextcloud",
+        "usernamePh": "tu-usuario",
+        "passwordLabel": "Contraseña de aplicación",
+        "passwordPh": "Pega tu contraseña de aplicación de Nextcloud",
+        "help": "Crea una contraseña de aplicación en Nextcloud en Ajustes → Seguridad → Contraseñas de aplicación"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "Creando...",
     "taskCreated": "Tarea creada en Todoist",
     "openTask": "Abrir en Todoist"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "Inicio",
+      "titleAttach": "Adjuntar desde Nextcloud",
+      "titleSave": "Guardar en Nextcloud",
+      "empty": "Esta carpeta está vacía",
+      "saveHere": "Guardar aquí"
+    }
   }
 }

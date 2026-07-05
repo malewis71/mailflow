@@ -150,6 +150,7 @@
       "restore": "Wiederherstellen",
       "close": "Schließen",
       "attachFile": "Datei anhängen",
+      "attachFromNextcloud": "Aus Nextcloud anhängen",
       "insertLink": "Link einfügen",
       "apply": "Anwenden",
       "insertTable": "Tabelle einfügen",
@@ -191,6 +192,10 @@
     "allowDomain": "Immer erlauben von @{{domain}}",
     "downloading": "Wird heruntergeladen…",
     "downloadAll": "Alle herunterladen",
+    "saveToNextcloud": "In Nextcloud speichern",
+    "savingToNextcloud": "Wird in Nextcloud gespeichert…",
+    "savedToNextcloud": "In Nextcloud gespeichert",
+    "saveToNextcloudFailed": "Speichern in Nextcloud fehlgeschlagen",
     "reply": "Antworten",
     "replyAll": "Allen antworten",
     "replyOptions": "Antwortoptionen",
@@ -1087,6 +1092,20 @@
         "summary": "{{contacts}} Kontakte in {{books}} Adressbüchern",
         "syncFailed": "Letzte Sync fehlgeschlagen: {{error}}",
         "help": "Verwenden Sie ein Nextcloud-App-Passwort, nicht Ihr Login-Passwort – SSO-Nutzer erstellen es unter Einstellungen → Sicherheit. Kontakte werden einseitig synchronisiert und sind in MailFlow schreibgeschützt."
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "Anhänge in Nextcloud speichern und Dateien aus Nextcloud anhängen",
+        "connect": "Verbinden",
+        "connecting": "Verbinde...",
+        "disconnect": "Trennen",
+        "connected": "Verbunden",
+        "notConnected": "Nicht verbunden",
+        "usernameLabel": "Nextcloud-Benutzername",
+        "usernamePh": "dein-benutzername",
+        "passwordLabel": "App-Passwort",
+        "passwordPh": "Nextcloud-App-Passwort einfügen",
+        "help": "Erstelle ein App-Passwort in Nextcloud unter Einstellungen → Sicherheit → App-Passwörter"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "Wird erstellt...",
     "taskCreated": "Aufgabe in Todoist erstellt",
     "openTask": "In Todoist öffnen"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "Start",
+      "titleAttach": "Aus Nextcloud anhängen",
+      "titleSave": "In Nextcloud speichern",
+      "empty": "Dieser Ordner ist leer",
+      "saveHere": "Hier speichern"
+    }
   }
 }

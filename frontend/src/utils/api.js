@@ -269,4 +269,14 @@ export const api = {
     getLabels:    ()       => request('GET',    '/todoist/labels'),
     createTask:   (data)   => request('POST',   '/todoist/tasks', data),
   },
+
+  // Nextcloud integration
+  nextcloud: {
+    status:     ()                   => request('GET',    '/nextcloud/status'),
+    connect:    (username, password) => request('POST',   '/nextcloud/connect', { username, password }),
+    disconnect: ()                   => request('DELETE', '/nextcloud/disconnect'),
+    list:       (path)               => request('GET',    `/nextcloud/list?path=${encodeURIComponent(path || '')}`),
+    download:   (path)               => request('GET',    `/nextcloud/download?path=${encodeURIComponent(path)}`),
+    upload:     (data)               => request('POST',   '/nextcloud/upload', data),
+  },
 };

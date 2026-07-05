@@ -1957,7 +1957,7 @@ function CardDavCard() {
 
 function IntegrationsTab() {
   const { t } = useTranslation();
-  const { setAccounts, setTodoistConnected } = useStore();
+  const { setAccounts, setTodoistConnected, setNextcloudConnected } = useStore();
   const [subTab, setSubTab] = useState('emailProviders');
   const [configs, setConfigs] = useState({});
   const [loading, setLoading] = useState(true);
@@ -1978,6 +1978,17 @@ function IntegrationsTab() {
   const [tdConnecting, setTdConnecting] = useState(false);
   const [tdDisconnecting, setTdDisconnecting] = useState(false);
   const [tdError, setTdError] = useState('');
+
+  // Nextcloud state
+  const [ncEnabled, setNcEnabled] = useState(false);
+  const [ncConnected, setNcConnected] = useState(false);
+  const [ncLoading, setNcLoading] = useState(true);
+  const [ncExpanded, setNcExpanded] = useState(false);
+  const [ncUsername, setNcUsername] = useState('');
+  const [ncPassword, setNcPassword] = useState('');
+  const [ncConnecting, setNcConnecting] = useState(false);
+  const [ncDisconnecting, setNcDisconnecting] = useState(false);
+  const [ncError, setNcError] = useState('');
 
   useEffect(() => {
     api.getIntegrations()
@@ -2004,6 +2015,16 @@ function IntegrationsTab() {
       })
       .catch(console.error)
       .finally(() => setTdLoading(false));
+
+    api.nextcloud.status()
+      .then(({ enabled, connected }) => {
+        setNcEnabled(enabled);
+        setNcConnected(connected);
+        setNextcloudConnected(connected);
+        if (connected) setNcExpanded(true);
+      })
+      .catch(console.error)
+      .finally(() => setNcLoading(false));
 
     // Listen for oauth_success / oauth_error messages from the OAuth popup tab.
     // URL-param detection has been moved to MailApp so it works regardless of
@@ -2130,6 +2151,38 @@ function IntegrationsTab() {
       setTdError(err.message);
     } finally {
       setTdDisconnecting(false);
+    }
+  };
+
+  const handleNcConnect = async () => {
+    const username = ncUsername.trim();
+    const password = ncPassword.trim();
+    if (!username || !password) return;
+    setNcConnecting(true);
+    setNcError('');
+    try {
+      await api.nextcloud.connect(username, password);
+      setNcConnected(true);
+      setNextcloudConnected(true);
+      setNcPassword('');
+    } catch (err) {
+      setNcError(err.message);
+    } finally {
+      setNcConnecting(false);
+    }
+  };
+
+  const handleNcDisconnect = async () => {
+    setNcDisconnecting(true);
+    setNcError('');
+    try {
+      await api.nextcloud.disconnect();
+      setNcConnected(false);
+      setNextcloudConnected(false);
+    } catch (err) {
+      setNcError(err.message);
+    } finally {
+      setNcDisconnecting(false);
     }
   };
 
@@ -2578,6 +2631,139 @@ function IntegrationsTab() {
             )}
           </div>
 
+          {/* Nextcloud */}
+          {ncEnabled && (
+            <div style={{
+              border: '1px solid var(--border-subtle)', borderRadius: 12,
+              overflow: 'hidden', marginBottom: 12,
+            }}>
+              {/* Header */}
+              <div
+                onClick={() => setNcExpanded(!ncExpanded)}
+                style={{
+                  padding: '14px 16px', display: 'flex', alignItems: 'center',
+                  gap: 12, cursor: 'pointer', background: 'var(--bg-tertiary)',
+                  transition: 'background 0.1s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'var(--bg-tertiary)'}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M7 14a3 3 0 1 1 .6-5.94A4 4 0 0 1 15 9.06 3 3 0 1 1 15.5 15H7.5A2.5 2.5 0 0 1 7 14z" />
+                </svg>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>
+                      {t('admin.integrations.nextcloud.title')}
+                    </span>
+                    <span style={{
+                      fontSize: 11, padding: '2px 8px', borderRadius: 10,
+                      background: (!ncLoading && ncConnected) ? 'rgba(34,197,94,0.1)' : 'var(--bg-primary)',
+                      color: (!ncLoading && ncConnected) ? '#22c55e' : 'var(--text-tertiary)',
+                      border: `1px solid ${(!ncLoading && ncConnected) ? '#22c55e' : 'var(--border)'}`,
+                    }}>
+                      {ncLoading ? '...' : (ncConnected ? t('admin.integrations.nextcloud.connected') : t('admin.integrations.nextcloud.notConnected'))}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 2 }}>
+                    {t('admin.integrations.nextcloud.description')}
+                  </div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" strokeWidth="2.5"
+                  style={{ transform: ncExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }}>
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </div>
+
+              {ncExpanded && (
+                <div style={{ padding: '16px 18px', borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {ncLoading ? (
+                    <div style={{ color: 'var(--text-tertiary)', fontSize: 13 }}>{t('admin.integrations.loading')}</div>
+                  ) : ncConnected ? (
+                    <>
+                      {ncError && (
+                        <div style={{ fontSize: 13, color: 'var(--red, #f87171)', padding: '8px 10px', borderRadius: 6, background: 'rgba(248,113,113,0.08)' }}>
+                          {ncError}
+                        </div>
+                      )}
+                      <div>
+                        <button
+                          onClick={handleNcDisconnect}
+                          disabled={ncDisconnecting}
+                          style={{
+                            padding: '6px 14px', borderRadius: 7, cursor: ncDisconnecting ? 'default' : 'pointer',
+                            border: '1px solid var(--border)', background: 'transparent',
+                            color: 'var(--text-secondary)', fontSize: 13, opacity: ncDisconnecting ? 0.6 : 1,
+                          }}
+                        >
+                          {ncDisconnecting ? t('common.loading') : t('admin.integrations.nextcloud.disconnect')}
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <label style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-secondary)', display: 'block', marginBottom: 5 }}>
+                          {t('admin.integrations.nextcloud.usernameLabel')}
+                        </label>
+                        <input
+                          type="text"
+                          value={ncUsername}
+                          onChange={e => setNcUsername(e.target.value)}
+                          placeholder={t('admin.integrations.nextcloud.usernamePh')}
+                          style={{
+                            padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)',
+                            background: 'var(--bg-primary)', color: 'var(--text-primary)',
+                            fontSize: 13, outline: 'none', width: '100%', boxSizing: 'border-box',
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-secondary)', display: 'block', marginBottom: 5 }}>
+                          {t('admin.integrations.nextcloud.passwordLabel')}
+                        </label>
+                        <input
+                          type="password"
+                          value={ncPassword}
+                          onChange={e => setNcPassword(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && !ncConnecting && ncUsername.trim() && ncPassword.trim() && handleNcConnect()}
+                          placeholder={t('admin.integrations.nextcloud.passwordPh')}
+                          style={{
+                            padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)',
+                            background: 'var(--bg-primary)', color: 'var(--text-primary)',
+                            fontSize: 13, outline: 'none', width: '100%', boxSizing: 'border-box',
+                          }}
+                        />
+                      </div>
+                      {ncError && (
+                        <div style={{ fontSize: 13, color: 'var(--red, #f87171)', padding: '8px 10px', borderRadius: 6, background: 'rgba(248,113,113,0.08)' }}>
+                          {ncError}
+                        </div>
+                      )}
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          onClick={handleNcConnect}
+                          disabled={ncConnecting || !ncUsername.trim() || !ncPassword.trim()}
+                          style={{
+                            padding: '6px 14px', borderRadius: 7,
+                            cursor: (ncConnecting || !ncUsername.trim() || !ncPassword.trim()) ? 'default' : 'pointer',
+                            border: 'none', background: 'var(--accent)', color: 'white',
+                            fontSize: 13, fontWeight: 500, opacity: (ncConnecting || !ncUsername.trim() || !ncPassword.trim()) ? 0.7 : 1,
+                          }}
+                        >
+                          {ncConnecting ? t('admin.integrations.nextcloud.connecting') : t('admin.integrations.nextcloud.connect')}
+                        </button>
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--text-tertiary)', lineHeight: 1.5 }}>
+                        {t('admin.integrations.nextcloud.help')}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
           <CardDavCard />
         </div>
       )}

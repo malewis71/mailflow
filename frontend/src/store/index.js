@@ -33,6 +33,14 @@ export const useStore = create((set, get) => ({
     set({ todoistConnected: connected });
   },
 
+  // Nextcloud integration status (persisted across page loads via localStorage)
+  nextcloudConnected: localStorage.getItem('mailflow_nextcloud_connected') === '1',
+  setNextcloudConnected: (connected) => {
+    if (connected) localStorage.setItem('mailflow_nextcloud_connected', '1');
+    else localStorage.removeItem('mailflow_nextcloud_connected');
+    set({ nextcloudConnected: connected });
+  },
+
   // Lock screen
   isLocked: localStorage.getItem('mailflow_locked') === '1',
   setLocked: (locked) => {

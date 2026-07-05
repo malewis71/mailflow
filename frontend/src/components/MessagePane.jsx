@@ -33,6 +33,7 @@ import { senderColor } from '../themes.js';
 import MessageHeaderModal from './MessageHeaderModal.jsx';
 import FolderIcon from './FolderIcon.jsx';
 import TodoistTaskModal from './TodoistTaskModal.jsx';
+import NextcloudBrowserModal from './NextcloudBrowserModal.jsx';
 
 function parseAddressField(raw) {
   try {
@@ -91,7 +92,7 @@ export default function MessagePane() {
     messages, searchResults, searchQuery, selectedMessageId, setSelectedMessage,
     updateMessage, removeMessage, decrementUnread, incrementUnread, openCompose, accounts, addNotification,
     imageWhitelist, addToImageWhitelist, blockRemoteImages, threadMessages,
-    replyDefault, shortcuts, recentFolders, favoriteFolders, todoistConnected,
+    replyDefault, shortcuts, recentFolders, favoriteFolders, todoistConnected, nextcloudConnected,
     categorizationEnabled, setCategoryCounts, adjustCategoryCount,
     aiActions, setShowAdmin, setAdminTab,
   } = useStore();
@@ -259,6 +260,8 @@ export default function MessagePane() {
   const [retryKey, setRetryKey] = useState(0);
   const [loadingBody, setLoadingBody] = useState(false);
   const [downloadingPart, setDownloadingPart] = useState(null);
+  const [savingPart, setSavingPart] = useState(null);
+  const [ncSaveTarget, setNcSaveTarget] = useState(null);
   const [showReplyMenu, setShowReplyMenu] = useState(false);
   const [savingAllow, setSavingAllow] = useState(false);
   const [paneScrolled, setPaneScrolled] = useState(false);
@@ -1200,6 +1203,21 @@ ${bodyContent}
       console.error('Download error:', err);
     } finally {
       setDownloadingPart(null);
+    }
+  };
+
+  const handleNcSave = async (folderPath) => {
+    const att = ncSaveTarget;
+    setNcSaveTarget(null);
+    if (!att) return;
+    setSavingPart(att.part);
+    try {
+      await api.nextcloud.upload({ messageId: message.id, part: att.part, folderPath });
+      addNotification({ title: t('message.savedToNextcloud'), body: att.filename });
+    } catch (err) {
+      addNotification({ title: t('message.saveToNextcloudFailed'), body: err.message });
+    } finally {
+      setSavingPart(null);
     }
   };
 
@@ -2221,10 +2239,9 @@ ${bodyContent}
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {attachments.map((att, i) => (
-                <button
+                <div
                   key={i}
                   onClick={() => handleDownload(message.id, att.part, att.filename)}
-                  disabled={downloadingPart === att.part}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8,
                     padding: '8px 12px', borderRadius: 8,
@@ -2247,7 +2264,9 @@ ${bodyContent}
                       {att.filename}
                     </div>
                     <div style={{ fontSize: 11, color: 'var(--text-tertiary)' }}>
-                      {downloadingPart === att.part ? t('message.downloading') : formatBytes(att.size)}
+                      {downloadingPart === att.part ? t('message.downloading')
+                        : savingPart === att.part ? t('message.savingToNextcloud')
+                        : formatBytes(att.size)}
                     </div>
                   </div>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -2256,7 +2275,24 @@ ${bodyContent}
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
                   </svg>
-                </button>
+                  {nextcloudConnected && (
+                    <button
+                      onClick={e => { e.stopPropagation(); setNcSaveTarget(att); }}
+                      disabled={savingPart === att.part}
+                      title={t('message.saveToNextcloud')}
+                      style={{
+                        background: 'none', border: 'none', padding: 2, flexShrink: 0,
+                        cursor: savingPart === att.part ? 'wait' : 'pointer',
+                        color: 'var(--text-tertiary)', display: 'flex',
+                      }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M7 18a4.5 4.5 0 0 1-.7-8.94A5.5 5.5 0 0 1 17 8a4 4 0 0 1 .5 7.97"/>
+                        <path d="M12 12v7m0-7l-2.5 2.5M12 12l2.5 2.5"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           </div>
@@ -2740,6 +2776,14 @@ ${bodyContent}
         <TodoistTaskModal
           message={message}
           onClose={() => setShowTodoistModal(false)}
+        />
+      )}
+
+      {ncSaveTarget && (
+        <NextcloudBrowserModal
+          mode="folder"
+          onSelect={handleNcSave}
+          onClose={() => setNcSaveTarget(null)}
         />
       )}
     </div>

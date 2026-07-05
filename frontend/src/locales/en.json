@@ -150,6 +150,7 @@
       "restore": "Restore",
       "close": "Close",
       "attachFile": "Attach file",
+      "attachFromNextcloud": "Attach from Nextcloud",
       "insertLink": "Insert link",
       "apply": "Apply",
       "insertTable": "Insert table",
@@ -191,6 +192,10 @@
     "allowDomain": "Always allow from @{{domain}}",
     "downloading": "Downloading…",
     "downloadAll": "Download all",
+    "saveToNextcloud": "Save to Nextcloud",
+    "savingToNextcloud": "Saving to Nextcloud…",
+    "savedToNextcloud": "Saved to Nextcloud",
+    "saveToNextcloudFailed": "Could not save to Nextcloud",
     "reply": "Reply",
     "replyAll": "Reply All",
     "replyOptions": "Reply options",
@@ -1154,6 +1159,20 @@
         "summary": "{{contacts}} contacts in {{books}} address books",
         "syncFailed": "Last sync failed: {{error}}",
         "help": "Use a Nextcloud app password, not your login password — SSO users must create one under Settings → Security. Contacts are synced one-way and are read-only in MailFlow."
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "Save attachments to your Nextcloud files and attach files from Nextcloud",
+        "connect": "Connect",
+        "connecting": "Connecting...",
+        "disconnect": "Disconnect",
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "usernameLabel": "Nextcloud username",
+        "usernamePh": "your-username",
+        "passwordLabel": "App password",
+        "passwordPh": "Paste your Nextcloud app password",
+        "help": "Create an app password in Nextcloud under Settings → Security → App passwords"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "Creating...",
     "taskCreated": "Task created in Todoist",
     "openTask": "Open in Todoist"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "Home",
+      "titleAttach": "Attach from Nextcloud",
+      "titleSave": "Save to Nextcloud",
+      "empty": "This folder is empty",
+      "saveHere": "Save here"
+    }
   }
 }

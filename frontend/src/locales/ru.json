@@ -150,6 +150,7 @@
       "restore": "Восстановить",
       "close": "Закрыть",
       "attachFile": "Прикрепить файл",
+      "attachFromNextcloud": "Прикрепить из Nextcloud",
       "insertLink": "Вставить ссылку",
       "apply": "Применить",
       "insertTable": "Вставить таблицу",
@@ -191,6 +192,10 @@
     "allowDomain": "Всегда разрешать от @{{domain}}",
     "downloading": "Загрузка…",
     "downloadAll": "Скачать все",
+    "saveToNextcloud": "Сохранить в Nextcloud",
+    "savingToNextcloud": "Сохранение в Nextcloud…",
+    "savedToNextcloud": "Сохранено в Nextcloud",
+    "saveToNextcloudFailed": "Не удалось сохранить в Nextcloud",
     "reply": "Ответить",
     "replyAll": "Ответить всем",
     "replyOptions": "Параметры ответа",
@@ -1154,6 +1159,20 @@
         "summary": "{{contacts}} контактов в {{books}} книгах",
         "syncFailed": "Последняя синхронизация не удалась: {{error}}",
         "help": "Используйте пароль приложения Nextcloud, а не пароль для входа — пользователям SSO нужно создать его в Настройки → Безопасность. Контакты синхронизируются в одну сторону и доступны только для чтения в MailFlow."
+      },
+      "nextcloud": {
+        "title": "Nextcloud",
+        "description": "Сохраняйте вложения в Nextcloud и прикрепляйте файлы из Nextcloud",
+        "connect": "Подключить",
+        "connecting": "Подключение...",
+        "disconnect": "Отключить",
+        "connected": "Подключено",
+        "notConnected": "Не подключено",
+        "usernameLabel": "Имя пользователя Nextcloud",
+        "usernamePh": "ваше-имя-пользователя",
+        "passwordLabel": "Пароль приложения",
+        "passwordPh": "Вставьте пароль приложения Nextcloud",
+        "help": "Создайте пароль приложения в Nextcloud в разделе Настройки → Безопасность → Пароли приложений"
       }
     },
     "ssoLinked": {
@@ -1253,5 +1272,14 @@
     "creating": "Создание...",
     "taskCreated": "Задача создана в Todoist",
     "openTask": "Открыть в Todoist"
+  },
+  "nextcloud": {
+    "browser": {
+      "home": "Главная",
+      "titleAttach": "Прикрепить из Nextcloud",
+      "titleSave": "Сохранить в Nextcloud",
+      "empty": "Эта папка пуста",
+      "saveHere": "Сохранить здесь"
+    }
   }
 }
