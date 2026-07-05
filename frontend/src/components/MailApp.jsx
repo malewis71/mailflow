@@ -18,6 +18,7 @@ const ContactsPage = lazy(() => import('./ContactsPage.jsx'));
 
 const ComposeModal = lazy(() => import('./ComposeModal.jsx'));
 const AdminPanel   = lazy(() => import('./AdminPanel.jsx'));
+const PdfViewerModal = lazy(() => import('./PdfViewerModal.jsx'));
 
 const lazyFallback = (
   <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
@@ -35,7 +36,7 @@ export default function MailApp() {
     mobileSidebarOpen, setMobileSidebarOpen, addNotification,
     fontSize, showAppBadge, showFaviconBadge,
     sidebarWidth, setSidebarWidth, setIsSidebarResizing,
-    showContacts, setTodoistConnected,
+    showContacts, setTodoistConnected, pdfViewer,
   } = useStore();
 
   const scale = fontSize / 100;
@@ -511,6 +512,7 @@ export default function MailApp() {
       )}
 
       <Suspense fallback={lazyFallback}>{composing && <ComposeModal />}</Suspense>
+      <Suspense fallback={lazyFallback}>{pdfViewer && <PdfViewerModal />}</Suspense>
       <Suspense fallback={lazyFallback}>{showAdmin && <AdminPanel />}</Suspense>
       <NotificationToasts />
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />

@@ -85,6 +85,12 @@ function fileIcon(type) {
   );
 }
 
+// Falls back to the filename extension since some servers report a generic
+// application/octet-stream content-type for PDFs.
+function isPdfAttachment(att) {
+  return att.type === 'application/pdf' || /\.pdf$/i.test(att.filename || '');
+}
+
 export default function MessagePane() {
   const { t } = useTranslation();
   const {
@@ -92,7 +98,7 @@ export default function MessagePane() {
     updateMessage, removeMessage, decrementUnread, incrementUnread, openCompose, accounts, addNotification,
     imageWhitelist, addToImageWhitelist, blockRemoteImages, threadMessages,
     replyDefault, shortcuts, recentFolders, favoriteFolders, todoistConnected,
-    categorizationEnabled, setCategoryCounts, adjustCategoryCount,
+    categorizationEnabled, setCategoryCounts, adjustCategoryCount, openPdfViewer,
     aiActions, setShowAdmin, setAdminTab,
   } = useStore();
 
@@ -2220,10 +2226,14 @@ ${bodyContent}
               )}
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {attachments.map((att, i) => (
+              {attachments.map((att, i) => {
+                const isPdf = isPdfAttachment(att);
+                return (
                 <button
                   key={i}
-                  onClick={() => handleDownload(message.id, att.part, att.filename)}
+                  onClick={() => isPdf
+                    ? openPdfViewer({ messageId: message.id, part: att.part, filename: att.filename, size: att.size })
+                    : handleDownload(message.id, att.part, att.filename)}
                   disabled={downloadingPart === att.part}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8,
@@ -2250,14 +2260,22 @@ ${bodyContent}
                       {downloadingPart === att.part ? t('message.downloading') : formatBytes(att.size)}
                     </div>
                   </div>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                    stroke="var(--text-tertiary)" strokeWidth="2" style={{ flexShrink: 0 }}>
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
+                  {isPdf ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                      stroke="var(--text-tertiary)" strokeWidth="2" style={{ flexShrink: 0 }}>
+                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  ) : (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                      stroke="var(--text-tertiary)" strokeWidth="2" style={{ flexShrink: 0 }}>
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                  )}
                 </button>
-              ))}
+              );})}
             </div>
           </div>
         )}

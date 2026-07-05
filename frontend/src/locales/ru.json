@@ -1253,5 +1253,13 @@
     "creating": "Создание...",
     "taskCreated": "Задача создана в Todoist",
     "openTask": "Открыть в Todoist"
+  },
+  "pdfViewer": {
+    "minimize": "Свернуть",
+    "maximize": "Развернуть",
+    "restore": "Восстановить",
+    "close": "Закрыть",
+    "download": "Скачать",
+    "loadError": "Не удалось загрузить PDF"
   }
 }

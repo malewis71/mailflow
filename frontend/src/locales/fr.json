@@ -1253,5 +1253,13 @@
     "creating": "Création...",
     "taskCreated": "Tâche créée dans Todoist",
     "openTask": "Ouvrir dans Todoist"
+  },
+  "pdfViewer": {
+    "minimize": "Réduire",
+    "maximize": "Agrandir",
+    "restore": "Restaurer",
+    "close": "Fermer",
+    "download": "Télécharger",
+    "loadError": "Impossible de charger le PDF"
   }
 }

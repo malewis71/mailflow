@@ -1253,5 +1253,13 @@
     "creating": "创建中...",
     "taskCreated": "任务已在 Todoist 中创建",
     "openTask": "在 Todoist 中打开"
+  },
+  "pdfViewer": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "还原",
+    "close": "关闭",
+    "download": "下载",
+    "loadError": "无法加载 PDF"
   }
 }
