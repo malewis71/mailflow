@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '../store/index.js';
 import { useMobile } from '../hooks/useMobile.js';
@@ -58,7 +59,9 @@ export default function PdfViewerModal() {
   }, [messageId, part, t]);
 
   const [minimized, setMinimized] = useState(false);
-  const [maximized, setMaximized] = useState(false);
+  // Defaults to maximized — a PDF is much more usable filling most of the
+  // viewport than in the smaller docked window compose-style windows start at.
+  const [maximized, setMaximized] = useState(true);
   const [pos, setPos] = useState(null);
   const [customSize, setCustomSize] = useState(() => {
     try {
@@ -212,7 +215,7 @@ export default function PdfViewerModal() {
   );
 
   if (isMobile) {
-    return (
+    return createPortal((
       <>
         <div style={{
           position: 'fixed', inset: 0, zIndex: 1999,
@@ -253,11 +256,11 @@ export default function PdfViewerModal() {
           {body}
         </div>
       </>
-    );
+    ), document.body);
   }
 
   if (minimized) {
-    return (
+    return createPortal((
       <div
         onClick={() => setMinimized(false)}
         style={{
@@ -276,10 +279,10 @@ export default function PdfViewerModal() {
         </svg>
         {filename}
       </div>
-    );
+    ), document.body);
   }
 
-  return (
+  return createPortal((
     <>
       {maximized && (
         <div
@@ -389,5 +392,5 @@ export default function PdfViewerModal() {
         )}
       </div>
     </>
-  );
+  ), document.body);
 }

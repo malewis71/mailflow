@@ -2229,18 +2229,15 @@ ${bodyContent}
               {attachments.map((att, i) => {
                 const isPdf = isPdfAttachment(att);
                 return (
-                <button
+                <div
                   key={i}
-                  onClick={() => isPdf
-                    ? openPdfViewer({ messageId: message.id, part: att.part, filename: att.filename, size: att.size })
-                    : handleDownload(message.id, att.part, att.filename)}
-                  disabled={downloadingPart === att.part}
+                  onClick={() => !isPdf && handleDownload(message.id, att.part, att.filename)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8,
                     padding: '8px 12px', borderRadius: 8,
                     background: 'var(--bg-secondary)',
                     border: '1px solid var(--border)',
-                    cursor: downloadingPart === att.part ? 'wait' : 'pointer',
+                    cursor: isPdf ? 'default' : (downloadingPart === att.part ? 'wait' : 'pointer'),
                     color: 'var(--text-primary)',
                     transition: 'background 0.1s',
                     maxWidth: 240,
@@ -2249,7 +2246,13 @@ ${bodyContent}
                   onMouseLeave={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
                 >
                   <span style={{ display: 'flex', flexShrink: 0, color: 'var(--text-secondary)' }}>{fileIcon(att.type)}</span>
-                  <div style={{ minWidth: 0, textAlign: 'left' }}>
+                  <div
+                    style={{ minWidth: 0, textAlign: 'left', cursor: isPdf ? 'pointer' : 'inherit' }}
+                    onClick={isPdf ? (e) => {
+                      e.stopPropagation();
+                      openPdfViewer({ messageId: message.id, part: att.part, filename: att.filename, size: att.size });
+                    } : undefined}
+                  >
                     <div style={{
                       fontSize: 12, fontWeight: 500,
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -2261,11 +2264,22 @@ ${bodyContent}
                     </div>
                   </div>
                   {isPdf ? (
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                      stroke="var(--text-tertiary)" strokeWidth="2" style={{ flexShrink: 0 }}>
-                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </svg>
+                    <button
+                      onClick={e => { e.stopPropagation(); handleDownload(message.id, att.part, att.filename); }}
+                      disabled={downloadingPart === att.part}
+                      title={t('pdfViewer.download')}
+                      style={{
+                        background: 'none', border: 'none', padding: 2, flexShrink: 0,
+                        cursor: downloadingPart === att.part ? 'wait' : 'pointer',
+                        color: 'var(--text-tertiary)', display: 'flex',
+                      }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                    </button>
                   ) : (
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                       stroke="var(--text-tertiary)" strokeWidth="2" style={{ flexShrink: 0 }}>
@@ -2274,7 +2288,7 @@ ${bodyContent}
                       <line x1="12" y1="15" x2="12" y2="3"/>
                     </svg>
                   )}
-                </button>
+                </div>
               );})}
             </div>
           </div>
