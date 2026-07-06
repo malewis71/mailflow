@@ -75,7 +75,7 @@ export async function listDirectory(username, password, path) {
     throw Object.assign(new Error(`Nextcloud folder listing failed (${res.status})`), { status: res.status === 404 ? 404 : 502 });
   }
   const xml = await res.text();
-  return parseMultistatus(xml);
+  return parseMultistatus(xml, path);
 }
 
 export async function downloadFile(username, password, path, { maxBytes } = {}) {
@@ -138,7 +138,12 @@ function hasChildTag(block, tag) {
   return new RegExp(`<(?:[a-zA-Z0-9]+:)?${tag}\\b`, 'i').test(block);
 }
 
-function parseMultistatus(xml) {
+function parseMultistatus(xml, requestPath) {
+  // PROPFIND with Depth:1 returns the requested collection itself as the first
+  // <response>, alongside its children. Comparing against the normalized request
+  // path (not just checking for an empty relPath) is required to filter that self
+  // entry out for subdirectories too, not just when listing the root.
+  const normalizedRequestPath = String(requestPath || '').replace(/^\/+|\/+$/g, '');
   const entries = [];
   for (const block of splitResponses(xml)) {
     const hrefRaw = extractTag(block, 'href');
@@ -146,7 +151,7 @@ function parseMultistatus(xml) {
     // href looks like /remote.php/dav/files/<user>/<path...> — keep everything after that prefix.
     const marker = decodeURIComponent(hrefRaw).match(/\/remote\.php\/dav\/files\/[^/]+\/?(.*)$/);
     const relPath = marker ? marker[1].replace(/\/$/, '') : '';
-    if (!relPath) continue; // the directory entry for itself — not a child
+    if (relPath === normalizedRequestPath) continue; // the directory entry for itself — not a child
     entries.push({
       name: decodeURIComponent(relPath.split('/').pop()),
       path: relPath,
