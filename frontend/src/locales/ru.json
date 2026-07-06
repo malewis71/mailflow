@@ -1279,7 +1279,10 @@
       "titleAttach": "Прикрепить из Nextcloud",
       "titleSave": "Сохранить в Nextcloud",
       "empty": "Эта папка пуста",
-      "saveHere": "Сохранить здесь"
+      "saveHere": "Сохранить здесь",
+      "columnName": "Имя",
+      "columnModified": "Изменено",
+      "columnSize": "Размер"
     }
   }
 }

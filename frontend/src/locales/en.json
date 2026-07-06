@@ -1279,7 +1279,10 @@
       "titleAttach": "Attach from Nextcloud",
       "titleSave": "Save to Nextcloud",
       "empty": "This folder is empty",
-      "saveHere": "Save here"
+      "saveHere": "Save here",
+      "columnName": "Name",
+      "columnModified": "Modified",
+      "columnSize": "Size"
     }
   }
 }

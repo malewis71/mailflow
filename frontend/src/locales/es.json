@@ -1279,7 +1279,10 @@
       "titleAttach": "Adjuntar desde Nextcloud",
       "titleSave": "Guardar en Nextcloud",
       "empty": "Esta carpeta está vacía",
-      "saveHere": "Guardar aquí"
+      "saveHere": "Guardar aquí",
+      "columnName": "Nombre",
+      "columnModified": "Modificado",
+      "columnSize": "Tamaño"
     }
   }
 }

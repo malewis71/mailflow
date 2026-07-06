@@ -1279,7 +1279,10 @@
       "titleAttach": "从 Nextcloud 添加附件",
       "titleSave": "保存到 Nextcloud",
       "empty": "此文件夹为空",
-      "saveHere": "保存到此处"
+      "saveHere": "保存到此处",
+      "columnName": "名称",
+      "columnModified": "修改时间",
+      "columnSize": "大小"
     }
   }
 }

@@ -310,6 +310,8 @@ const SAME_VALUE_ALLOWED = {
   // ── Nextcloud integration ──────────────────────────────────────────────────
   // "Nextcloud" — brand name, same in all locales
   'admin.integrations.nextcloud.title': 'any',
+  // "Name" — same spelling in de and en
+  'nextcloud.browser.columnName': [['de', 'en']],
 };
 
 // Keys referenced dynamically (via a variable passed to t()) that cannot be

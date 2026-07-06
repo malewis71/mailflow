@@ -1279,7 +1279,10 @@
       "titleAttach": "Joindre depuis Nextcloud",
       "titleSave": "Enregistrer dans Nextcloud",
       "empty": "Ce dossier est vide",
-      "saveHere": "Enregistrer ici"
+      "saveHere": "Enregistrer ici",
+      "columnName": "Nom",
+      "columnModified": "Modifié",
+      "columnSize": "Taille"
     }
   }
 }
