@@ -2227,7 +2227,9 @@ ${bodyContent}
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {attachments.map((att, i) => {
-                const isPdf = isPdfAttachment(att);
+                // Preview is desktop-only — the floating window doesn't make sense
+                // on a small screen, so mobile falls back to a plain download.
+                const isPdf = isPdfAttachment(att) && !isMobile;
                 return (
                 <div
                   key={i}
